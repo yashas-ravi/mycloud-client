@@ -1,6 +1,7 @@
 import addServer from "../assets/icons/add-server.png";
 import currentServer from "../assets/icons/current-server.png";
 import page from "../assets/icons/document.png";
+import download from "../assets/icons/downloads.png";
 import features from "../assets/icons/features.png";
 import feedback from "../assets/icons/feedback.png";
 import folder from "../assets/icons/folder.png";
@@ -18,6 +19,7 @@ import rightArrow from "../assets/icons/right-arrows.png";
 import settings from "../assets/icons/settings.png";
 import cpu from "../assets/icons/speedometer.png";
 import storage from "../assets/icons/storage.png";
+import upload from "../assets/icons/up-loading.png";
 import profile from "../assets/icons/user.png";
 import report from "../assets/icons/warning-sign.png";
-export default {home,settings,rightArrow, cpu, ram, addServer, currentServer, features, live, folder, github, legal, report, about, feedback, help, profile, storage,storage1, page, reset, leftArrow};
+export default {home,settings,rightArrow, cpu, ram, addServer, download,upload, currentServer, features, live, folder, github, legal, report, about, feedback, help, profile, storage,storage1, page, reset, leftArrow};

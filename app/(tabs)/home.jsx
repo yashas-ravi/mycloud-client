@@ -20,7 +20,7 @@ const Home = () => {
   const [storBar, setStorBar] = useState(null);
   const [savedServers, setSavedServers] = useState([]);
   const [info, setInfo] = useState(null);
-  const {rtc} = useWebRTC();
+  const {rtc, setRTC} = useWebRTC();
 
   const sleep=(ms)=>{
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -43,6 +43,7 @@ const Home = () => {
       setSLoading(true);
       rtc.close();
       rtc.isConnected = false;
+      setRTC(null);
       setInfo(null);
       setStorBar(null);
       setStorStats(null);
@@ -62,13 +63,13 @@ const Home = () => {
         if (!rtc) return console.warn("RTC not ready yet");
         setSLoading(true);
         const cpu = await rtc?.sendCommand("CPU");
-        await sleep(2);
+        await sleep(1);
         const ram = await rtc?.sendCommand("RAM");
 
         if (cpu&&ram) {
           setCpuStats(cpu);
           setRamStats(ram);
-          setCpuBar(usageHelper(cpu,1))
+          setCpuBar(usageHelper(cpu,1));
           setRamBar(usageHelper(ram,0));
         }
       } catch (err) {
@@ -77,8 +78,6 @@ const Home = () => {
         setSLoading(false);
       }
     };
-
-    useEffect(()=>{
      
       const loadServers=async()=>{
       try{
@@ -98,7 +97,7 @@ const Home = () => {
           if (rtc){
           setSLoading(true);
           const info = await rtc?.sendCommand("SYSTEMINFO");
-          await sleep(2);
+          await sleep(1);
           const stor = await rtc?.sendCommand("STORAGE");
 
           if(info&&stor){
@@ -113,23 +112,25 @@ const Home = () => {
           setSLoading(false);
         }
       };
-      loadServers();
-      getDataOnce();
-    },[rtc]);
-
 
   useEffect(()=>{
     let intervalId;
+    let mounted = true;
     const init = async () => {
-      setTimeout(() => {
-        getStatus();
+      await loadServers();
+      await getDataOnce();
+      if (!mounted) return;
+      setTimeout(async() => {
+        await getStatus();
+        await getDataOnce();
         intervalId = setInterval(getStatus, 2 * 60 * 1000);
       }, 3000);
     };
-
-      init();
-
+    
+    init();
+  
     return () => {
+    mounted = false;
     if (intervalId) clearInterval(intervalId);
     };
 
@@ -172,14 +173,19 @@ const Home = () => {
             </View>
           </View>
           <View className="w-full flex-row items-center justify-between mt-[5vh] gap-x-4">
+            <View className="flex-row items-center gap-x-5">
             <Image 
             source={icons.currentServer}
             resizeMode='contain'
             className="w-8 h-7"
             tintColor="#0077b6"
             />
+            <TouchableOpacity onPress={()=>{getDataOnce()}}>
             <Text className="font-mbold text-secondary text-2xl">{rtc?rtc.SERVER_NAME:"Select Server"}</Text>
-            {rtc?<TouchableOpacity onPress={handleCloseRtc}>
+            </TouchableOpacity>
+            </View>
+            {rtc?
+            <TouchableOpacity onPress={handleCloseRtc}>
             <Text className="text-red-400 font-mbold text-sm">Close Connection</Text>
             </TouchableOpacity>:null}
           </View>

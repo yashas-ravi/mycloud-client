@@ -1,7 +1,7 @@
-import * as FileSystem from "expo-file-system";
-import { writeAsStringAsync } from 'expo-file-system/legacy';
+import * as FileSystem from "expo-file-system/legacy";
+import * as MediaLibrary from 'expo-media-library';
 import { useState } from 'react';
-import { ActivityIndicator, FlatList, Image, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Image, Modal, Text, TouchableOpacity, View } from 'react-native';
 import { icons } from '../constants/index';
 import { useWebRTC } from '../context/WebRTCProvider';
 import FeaturesMenu from './FeaturesMenu';
@@ -11,7 +11,49 @@ const FileSystemModel = () => {
   const [loading, setLoading] = useState(false);
   const [backlink, setBacklink] = useState([]);
   const [files, setFiles] = useState(null);
+  const [fileName, setFileName] = useState(null);
+  const [filePath, setFilePath] = useState(null);
   const {rtc} = useWebRTC();
+
+
+  const handleDownload = async() =>{
+    try{
+          // console.log(fileData);
+          setLoading(true);
+          const base64Data = files.data;
+          const filename = files.name;
+          const permission = await MediaLibrary.requestPermissionsAsync();
+             if (!permission.granted) {
+              Alert.alert("Permission required to save files");
+              return;
+            }
+          const downloadsUri = FileSystem.StorageAccessFramework.getUriForDirectoryInRoot(
+           "Download"
+          );
+          const dirPerm = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync(downloadsUri);
+          if (!dirPerm.granted) {
+            alert("Storage permission not granted");
+            return;
+          }
+          const filePath = await FileSystem.StorageAccessFramework.createFileAsync(
+              dirPerm.directoryUri,
+              filename.split('/').pop(),
+              "application/pdf"
+            );
+          await FileSystem.writeAsStringAsync(
+            filePath,
+            base64Data,
+            { encoding: FileSystem.EncodingType.Base64 }
+          );
+          console.log('File saved successfully!');
+          Alert.alert("Download complete", `Saved to ${filePath}`);
+        }catch(err){
+          console.log("Error while downloading file",err);
+          Alert.alert("Error while downloading file",err);
+        }finally{
+          setLoading(false);
+        }
+    }
 
   const fetchFiles=async(dir,d)=>{
     try {
@@ -19,15 +61,6 @@ const FileSystemModel = () => {
         setLoading(true);
         const data = d ? await rtc?.sendCommand(`FILESYS:${dir}`): await rtc?.sendCommand(`FILESYS.${dir}`);
         setFiles(JSON.parse(data));
-        if(d){
-          const base64Data = files.data;
-          const filePath = `${FileSystem.externalStorageDirectory}Download/${files.name}`;
-          await writeAsStringAsync(filePath, base64Data, {
-            encoding: FileSystem.EncodingType.UTF8,
-          }); 
-          console.log('File saved successfully!');
-          Alert.alert("Download complete", `Saved to ${filePath}`);
-        }
       }
     } catch (error) {
       console.log("Error",error);
@@ -39,8 +72,8 @@ const FileSystemModel = () => {
   return (
     <View>
       <FeaturesMenu
-        icon={icons.folder}
-        title="Files"
+        icon={icons.download}
+        title="Download Files"
         handlePress={()=>{
           setVisible(true);
           fetchFiles("/home");
@@ -72,8 +105,8 @@ const FileSystemModel = () => {
                     data={files}
                     keyExtractor={(item,index)=>`${item.name}-${index}`}
                     ListEmptyComponent={
-                      <View className="items-center justify-center h-[10vh] w-full">
-                        <Text className="font-mmedium text-lg text-black">Nothing To Show :)</Text>
+                      <View className="items-center justify-center h-[20vh] w-full">
+                        {fileName?<><Text className="font-mmedium text-lg text-black">{fileName} - {files.size<1048576?`${(files.size / 1024).toFixed(2)} KB`:`${(files.size / 1024 / 1024).toFixed(2)} MB`}</Text><TouchableOpacity onPress={handleDownload}><Text className="font-mmedium text-lg text-blue-600 bg-blue-100 p-2 rounded-md mt-4">Download</Text></TouchableOpacity></>:<Text className="font-mmedium text-lg text-black ">Nothing To Show :)</Text>}
                       </View>
                     }
                     renderItem={({item})=>(
@@ -85,6 +118,7 @@ const FileSystemModel = () => {
                         }
                         else{
                           fetchFiles(item.path+"/"+item.name,1);
+                          setFileName(item.name);
                           backlink.push(item.path);
                         }
                       }}

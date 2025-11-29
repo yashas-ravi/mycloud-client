@@ -66,16 +66,11 @@ const settings = () => {
             icon={icons.reset}
             handlePress={handleResetApp}
           />
-          <Text className="text-2xl text-black font-msemibold mt-4">Storage</Text>
-          <SettingsList
-            title="Downloads"
-            icon={icons.storage}
-          />
           <Text className="text-2xl text-black font-msemibold mt-4">App</Text>
            <SettingsList
             title="About"
             icon={icons.about}
-            handlePress={()=>Linking.openURL('https://github.com/yashas-ravi/MyCloud')}
+            handlePress={()=>Linking.openURL('https://github.com/yashas-ravi/mycloud-client')}
           />
           <SettingsList
             title="Feedback"
@@ -90,6 +85,7 @@ const settings = () => {
           <SettingsList
             title="Legal"
             icon={icons.legal}
+             handlePress={()=>Linking.openURL('https://github.com/yashas-ravi/mycloud-client')}
           />
           <SettingsList
             title="Report"

@@ -3,9 +3,9 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { Image, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import FeaturesMenu from '../../components/FeaturesMenu';
 import FileSystemModel from '../../components/FileSystemModel';
 import ServerPicker from '../../components/ServerPicker';
+import UploadFileModel from "../../components/UploadFileModel.jsx";
 import { icons } from '../../constants/index';
 import MyCloudWebRTC from '../../context/WebRTC';
 import { useWebRTC } from '../../context/WebRTCProvider';
@@ -49,10 +49,7 @@ const Features = () => {
         </View>
         <View className="bg-gray-200 h-full rounded-t-3xl pt-7 p-4 gap-y-4">
             <FileSystemModel />
-            <FeaturesMenu
-               title="Live Stream"
-               icon={icons.live}
-            />
+            <UploadFileModel/>
         </View> 
         <StatusBar style='inverted'/>
     </SafeAreaView>
