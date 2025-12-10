@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "mycloud-client",
-    "slug": "mycloud-client",
+    "name": "mycloud client",
+    "slug": "mycloud client",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/MyCloud-logo.png",
+    "icon": "./assets/images/MyCloud-logo-small.png",
     "scheme": "mycloudclient",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -16,7 +16,7 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/MyCloud-logo.png"
+        "foregroundImage": "./assets/images/MyCloud-logo-small.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,

@@ -12,8 +12,17 @@ const FileSystemModel = () => {
   const [backlink, setBacklink] = useState([]);
   const [files, setFiles] = useState(null);
   const [fileName, setFileName] = useState(null);
-  const [filePath, setFilePath] = useState(null);
   const {rtc} = useWebRTC();
+
+
+  const handleClose=()=>{
+          setFileName(null);
+          setBacklink(null);
+          setFiles(null);
+          setFileName(null);
+          setLoading(false);
+          setVisible(false);
+    }
 
 
   const handleDownload = async() =>{
@@ -84,7 +93,7 @@ const FileSystemModel = () => {
               <View className="bg-white w-[80%] rounded-md max-h-[80vh] min-h-[50vh] p-2">
                 <View className="flex-row justify-between px-4 items-center border-b-2 border-gray-200 h-[50px]">
                   <Text className="text-black font-mbold text-[18px]">Files</Text>
-                  <TouchableOpacity onPress={()=>setVisible(false)}>
+                  <TouchableOpacity onPress={handleClose}>
                     <Text className="text-red-400 font-mbold text-[15px]">Close</Text>
                   </TouchableOpacity>
                 </View>

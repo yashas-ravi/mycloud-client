@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FlatList, Modal, Text, TouchableOpacity, View } from "react-native";
 
-const ServerPicker = ({ servers, onSelect }) => {
+const ServerPicker = ({ servers, onSelect, deleteServer}) => {
   const [visible, setVisible] = useState(false);
 
   const handleSelect = (server) => {
@@ -33,15 +33,21 @@ const ServerPicker = ({ servers, onSelect }) => {
               }
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
+                <View className="flex-row gap-x-3 justify-center items-center">
                 <TouchableOpacity
-                  className="p-3 bg-gray-100 rounded-md mb-2"
+                  className="p-3 bg-gray-100 rounded-md mb-2 flex-1"
                   onPress={() => handleSelect(item)}
                 >
                   <Text className="text-lg font-mmedium text-gray-700 ">
                     {item.name} - {item.id}
                   </Text>
                 </TouchableOpacity>
+                <TouchableOpacity className="pb-2 w-5 items-center justify-center" onPress={()=>deleteServer(item.name)}>
+                      <Text className="text-red-400 font-mbold text-2xl pb-2">x</Text>
+                </TouchableOpacity>
+                 </View>
               )}
+             
             />
              <TouchableOpacity
               onPress={() => setVisible(false)}

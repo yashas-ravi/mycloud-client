@@ -31,6 +31,12 @@ const Features = () => {
         setRTC(newRtc);
     }
 
+    const handleDeleteServer=async(s)=>{
+        const newlist = servers.filter(i=>i.name!==s);
+        setServers(newlist);
+        await AsyncStorage.setItem("servers", JSON.stringify(newlist));
+    }
+
   return (
     <SafeAreaView className="bg-white h-full">
         <View className="h-[15vh] bg-white items-center justify-center flex-row gap-x-4">
@@ -45,6 +51,7 @@ const Features = () => {
            <ServerPicker
             servers={servers}
             onSelect={(s)=>handleRtcInit(s)}
+            deleteServer={(s)=>handleDeleteServer(s)}
            />
         </View>
         <View className="bg-gray-200 h-full rounded-t-3xl pt-7 p-4 gap-y-4">
