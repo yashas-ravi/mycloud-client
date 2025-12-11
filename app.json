@@ -4,7 +4,7 @@
     "slug": "mycloud-client",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/MyCloud-logo-small.png",
+    "icon": "./assets/images/adaptive-icon.png",
     "scheme": "mycloudclient",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -16,7 +16,7 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/MyCloud-logo-small.png"
+        "foregroundImage": "./assets/images/adaptive-icon.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
