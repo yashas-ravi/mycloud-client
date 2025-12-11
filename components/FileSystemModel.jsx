@@ -16,10 +16,6 @@ const FileSystemModel = () => {
 
 
   const handleClose=()=>{
-          setFileName(null);
-          setBacklink(null);
-          setFiles(null);
-          setFileName(null);
           setLoading(false);
           setVisible(false);
     }
@@ -123,9 +119,9 @@ const FileSystemModel = () => {
                       onPress={()=>{
                         if(item.type==="folder"){
                           fetchFiles(item.path+"/"+item.name, 0);
-                          backlink.push(item.path);
+                          setBacklink(prev => [...(prev || []), item.path]);
                         }
-                        else{
+                        if(item.type==="file"){
                           fetchFiles(item.path+"/"+item.name,1);
                           setFileName(item.name);
                           backlink.push(item.path);

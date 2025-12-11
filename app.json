@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "mycloud client",
-    "slug": "mycloud client",
+    "slug": "mycloud-client",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/MyCloud-logo-small.png",
@@ -55,6 +55,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "51adb267-3ba0-44c9-b79a-cb28d7bca61d"
+      }
+    },
+    "owner": "yashasravi"
   }
 }
